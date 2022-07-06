@@ -1,0 +1,30 @@
+{
+    "comments": [
+        {
+            "count": "Colony counts of 10000 - >=100000 CFU/ml of single/two Potential pathogen/s.",
+            "comment": "Significant Growth. Suggestive of Urinary tract infection (UTI) requiring treatment based on antimicrobial suceptibility testing results."
+        },
+        {
+            "count": "Colony counts between 1000 to 10000 CFU/ml of single Potential pathogen.",
+            "comment": "Can be considered Significant growth, correlation with Microscopy and Clinical history required."
+        },
+        {
+            "count": "Colony counts between 100 to 1000 CFU/ml.",
+            "comment": "Insignificant growth. Probable commensal contamination during voiding."
+        },
+        {
+            "count": ">= 3 organism types with no predominant (10000 >= 100000 CFU/ml) pathogen.",
+            "comment": "Fresh specimen required as possibility of contamination during voiding."
+        }
+    ],
+    "notes": [
+        "COLONY COUNT : The presence of a single type of bacteria growing at high colony count is considered a positive urine culture.",
+        "SUSCEPTIBLE : Isolates is inhibited by usually achievable concentration of antimicrobial agents with dosage recommended to treat the site of infection used.",
+        "INTERMEDIATE : Isolates with antimicrobial agent, that with usually attainable blood and tissue levels may be lower than for susceptible isolates, clinical efficiency of the drug in the body sites where the drugs are physiologically concentrative (Qunolones and    -lactatesin urine) or when a higher than a normal dosage of the drug can be used (   -lactams).",
+        "RESISTANCE : Isolates are not inhibited by usually achievable concentrations of the agents with normal dosage schedule.",
+        "Previous history of antibiotic usage may influence the growth of microorganisms in vitro.",
+        "Low counts can be considered significant in patients on antimicrobial therapy, diuretics and growth of pure culture of S.aureus.",
+        "Any growth of yeasts may be correlated clinically and specimen repeated for fungal culture with identification and susceptibility testing.",
+        "Result of culture and antimicrobial susceptibility test need to be correlated clinically."
+    ]
+}
