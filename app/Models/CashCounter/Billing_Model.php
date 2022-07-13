@@ -85,7 +85,7 @@ class Billing_Model {
 
     public function GetTestFees(string $test): object {
         return $this->db->table('tblTestMaster')
-                        ->select('Category category,Fees fees')
+                        ->select('Category category,Fees fees, rbsDiscount')
                         ->where(['ShortName' => $test, 'HosID' => $this->hosID])
                         ->get()
                         ->getRow();
@@ -93,7 +93,7 @@ class Billing_Model {
 
     public function GetProfileFees(string $profile): object {
         return $this->db->table('tblProfileMaster')
-                        ->select('\'Profile\' category,Fees fees')
+                        ->select('\'Profile\' category,Fees fees,rbsDiscount')
                         ->where(['ProfileName' => $profile, 'HosID' => $this->hosID])
                         ->get()
                         ->getRow();
@@ -123,7 +123,7 @@ class Billing_Model {
         $insertData = [
             'BillMonth' => $month, 'BillNo' => $billNo, 'PID' => $data->id, 'PName' => $data->name, 'Age' => $data->age,
             'Gender' => $data->gender, 'ContactNo' => $data->contact, 'Consultant' => $data->consultant,
-            'Total' => $data->total, 'TotalDiscount' => $data->discount, 'SubTotal' => $data->subTotal, 'PaidAmount' => $data->paying,
+            'Total' => $data->total, 'RBSDiscount' => $data->rbsdiscount, 'TotalDiscount' => $data->discount, 'SubTotal' => $data->subTotal, 'PaidAmount' => $data->paying,
             'InitialPaid' => $data->initPaid, 'DueAmount' => $data->due, 'RefundAmount' => $data->refund, 'BillType' => $data->billType, 'OtherPayments' => $data->otherType,
             'CardNo' => $data->cardNo, 'CardType' => $data->cardType, 'CardExpiry' => $data->cardExpiry, 'Cash' => $data->cash,
             'Card' => $data->card, 'BillDate' => date('Y-m-d'), 'BillTime' => date('H:i:s'), 'BilledBy' => $userName,
@@ -180,7 +180,7 @@ class Billing_Model {
         $data['data'] = [
             'txtID' => $first->PID, 'name' => $first->PName, 'age' => $first->Age, 'gender' => $first->Gender,
             'contact' => $first->ContactNo, 'consultant' => $first->Consultant, 'total' => $first->Total,
-            'discount' => $first->TotalDiscount, 'subTotal' => $first->SubTotal, 'paying' => $first->PaidAmount,
+            'rbsdiscount' => $first->RBSDiscount, 'discount' => $first->TotalDiscount, 'subTotal' => $first->SubTotal, 'paying' => $first->PaidAmount,
             'initPaid' => $first->InitialPaid,
             'due' => $first->DueAmount, 'refund' => $first->RefundAmount, 'billType' => $first->BillType,
             'otherType' => $first->OtherPayments, 'cardNo' => $first->CardNo, 'cardType' => $first->CardType,

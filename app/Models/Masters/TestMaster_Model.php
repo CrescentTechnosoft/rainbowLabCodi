@@ -36,7 +36,7 @@ class TestMaster_Model
     {
         $returnData=array('fields'=>[]);
         $builder=$this->db->table('tblTestMaster');
-        $builder->select('Category,TestName,ShortName,Fees,FieldCategory,FieldName,Method,Sample,Units,NormalValue,Comments,Parameters')
+        $builder->select('Category,TestName,ShortName,Fees,FieldCategory,rbsDiscount,FieldName,Method,Sample,Units,NormalValue,Comments,Parameters')
         ->distinct()
         ->where(['TestName'=>$testName,'HosID'=>$this->hosID]);
 
@@ -45,7 +45,7 @@ class TestMaster_Model
             $first=$result[0];
             
             //Category,TestName,Fees
-            $returnData['data']=['category'=>$first->Category,'test'=>$first->TestName,'short'=>$first->ShortName,'fees'=>$first->Fees];
+            $returnData['data']=['category'=>$first->Category,'test'=>$first->TestName,'short'=>$first->ShortName,'fees'=>$first->Fees,'rbsDiscount'=>$first->rbsDiscount];
 
             //Fields
             foreach ($result as $res) {
@@ -69,7 +69,7 @@ class TestMaster_Model
         foreach ($fields as $field) {
             $insertval[] = [
                 'Category'=>$data->category,'TestName'=>$data->test,'ShortName'=>$short,'Fees'=>$data->fees,
-                'FieldCategory'=>$field->fieldCat,'FieldName'=>$field->field,'Method'=>$field->method,
+                'rbsDiscount'=>$data->rbsDiscount,'FieldCategory'=>$field->fieldCat,'FieldName'=>$field->field,'Method'=>$field->method,
                 'Sample'=>$field->sample,'Units'=>$field->units,'NormalValue'=>$field->normal,'Comments'=>$field->comment,
                 'Parameters'=>$field->parameters,'HosID'=>$this->hosID
             ];

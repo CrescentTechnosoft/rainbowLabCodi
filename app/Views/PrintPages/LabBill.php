@@ -112,8 +112,10 @@ $pdf->Row(['Bill Amount',$firstRow->Total], false);
 
 if (floatval($firstRow->TotalDiscount)>0) {
     $pdf->Row(['Discount',$firstRow->TotalDiscount]);
-    $pdf->Row(['Sub Total',$firstRow->SubTotal]);
 }
+$pdf->Row(['RBS Discount',$firstRow->RBSDiscount]);
+$pdf->Row(['Sub Total',$firstRow->SubTotal]);
+
 $pdf->Row(['Amount Received',$firstRow->PaidAmount], false);
 
 if (floatval($firstRow->DueAmount)>0) {
@@ -122,7 +124,7 @@ if (floatval($firstRow->DueAmount)>0) {
 
 $pdf->Ln(10);
 if($firstRow->HosID ==1){
-$pdf->Cell(118, 5, 'FOR VENKATESWARA DIAGNOSTICS CENTRE', 0, 1, 'R');
+$pdf->Cell(118, 5, 'FOR RAINBOW SCANS', 0, 1, 'R');
 }else{
     $pdf->Cell(130, 5, 'Authorised signature', 0, 1, 'R');
 }
