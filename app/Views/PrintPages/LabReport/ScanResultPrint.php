@@ -18,9 +18,9 @@ class PDF extends code128
 
     public function Footer()
     {
-        $this->SetY(-40);
+        $this->SetY(-30);
         if ($this->headerType==='wh') {
-            $this->Image(APPPATH.'Images/rainbow_foot.jpg', 0, $this->GetY(), 210, 40);
+            $this->Image(APPPATH.'Images/rainbow_foot.jpg', 0, $this->GetY(), 210, 30);
             $this->SetTextColor(255, 255, 255);
         }
     }
@@ -116,7 +116,13 @@ $pdf->Ln(15);
 // $pdf->SetFont('Archivo', 'B');
 // $pdf->Cell(70, 5, 'DR.SELVAKUMARAN. PHD,', 0, 0);
 // $pdf->Cell(70, 5, 'DR.VASANTHI.K,MD,PATH', 0, 1);
-
+$pdf->SetX(15);
+$pdf->Cell(70, 5, '', 0, 0);
+$pdf->SetFont('Archivo', 'B','10');
+$pdf->Cell(55, 5, '', 0, 0);
+$pdf->Cell(60, 5, 'Dr.M.SOCKALINGAM, MBBS,PGD(USG),(FRCR)(UK)', 0, 1,'R');
+$pdf->Cell(70, 5, '', 0, 0);
+$pdf->Cell(110, 5, 'Consultant Sonologist & Radiologist', 0, 1,'R');
 // $pdf->SetFont('Archivo');
 // $pdf->SetX(89);
 // $pdf->Cell(72, 5, 'MICROBIOLOGIST', 0, 0);
