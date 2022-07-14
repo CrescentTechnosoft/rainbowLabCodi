@@ -74,7 +74,7 @@ class LabReport extends BaseController
             echo (view('Templates/NoDetailsPage'));
         } else {
             $data['header']=$header;
-            echo (view('PrintPages/LabReport/ScanResult', $data));
+            echo (view('PrintPages/LabReport/ScanResultPrint', $data));
         }
     }
     

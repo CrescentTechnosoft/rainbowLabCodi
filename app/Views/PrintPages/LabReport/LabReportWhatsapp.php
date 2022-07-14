@@ -213,16 +213,16 @@ $pdf->CheckPageBreak(25);
 if ($pdf->GetY()<100) {
     $pdf->Ln(20);
 }
-$pdf->Image(APPPATH.'Images/VenkateshwaraLabsMicrobiologistSign.jpg', 90, $pdf->GetY()-10, 30, 11);
-$pdf->Image(APPPATH.'Images/VenkateshwaraLabsPathologistSign.jpg', 153, $pdf->GetY()-11, 33, 12);
+// $pdf->Image(APPPATH.'Images/VenkateshwaraLabsMicrobiologistSign.jpg', 90, $pdf->GetY()-10, 30, 11);
+// $pdf->Image(APPPATH.'Images/VenkateshwaraLabsPathologistSign.jpg', 153, $pdf->GetY()-11, 33, 12);
 
 // $pdf->SetTextColor(0, 0, 0);
 $pdf->SetFont('Archivo', '', 10);
 $pdf->Cell(70, 5, 'Technologist', 0, 0);
 
 $pdf->SetFont('Archivo', 'B');
-$pdf->Cell(70, 5, 'DR.SELVAKUMARAN. PHD,', 0, 0);
-$pdf->Cell(70, 5, 'DR.VASANTHI.K,MD,PATH', 0, 1);
+// $pdf->Cell(70, 5, 'DR.SELVAKUMARAN. PHD,', 0, 0);
+// $pdf->Cell(70, 5, 'DR.VASANTHI.K,MD,PATH', 0, 1);
 
 $pdf->SetFont('Archivo');
 $pdf->SetX(89);

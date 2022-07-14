@@ -14263,7 +14263,7 @@ CREATE TABLE `tblReminderData` (
   `id` int NOT NULL,
   `ReminderDate` varchar(100) DEFAULT NULL,
   `HosId` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 

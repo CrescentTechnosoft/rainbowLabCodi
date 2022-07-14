@@ -7,7 +7,7 @@ class PDF extends code128
     public $reportedPerson;
     public function Header()
     {
-        if ($this->headerType==='WH') {
+        if ($this->headerType==='wh') {
             $this->Image(APPPATH.'Images/rainbow_head.jpg', 0, 0, 210, 30);
 
             $this->SetXY(10, 32);
@@ -19,7 +19,7 @@ class PDF extends code128
     public function Footer()
     {
         $this->SetY(-40);
-        if ($this->headerType==='WH') {
+        if ($this->headerType==='wh') {
             $this->Image(APPPATH.'Images/rainbow_foot.jpg', 0, $this->GetY(), 210, 40);
             $this->SetTextColor(255, 255, 255);
         }
@@ -121,5 +121,7 @@ $pdf->Ln(15);
 // $pdf->SetX(89);
 // $pdf->Cell(72, 5, 'MICROBIOLOGIST', 0, 0);
 // $pdf->Cell(70, 5, 'PATHOLOGIST', 0, 1);
-
-$pdf->Output('', "Report Bill #$OPData->BillMonth$OPData->BillNo.pdf", 1);
+// $pdf->Output(isset($type)?$type:'I', isset($name)?$name:'Bill #' . $OPData->BillNo . '.pdf', 1);
+$filename = $OPData->BillNo;
+$pdf->Output('F',WRITEPATH.('temp').'/'.$filename. '.pdf', true);
+// $pdf->Output('', "Report Bill #$OPData->BillMonth$OPData->BillNo.pdf", 1);

@@ -9,12 +9,12 @@ class Email extends BaseConfig
 	/**
 	 * @var string
 	 */
-	public $fromEmail='vdck@venkateswaradiagnostic.in';
+	public $fromEmail='rainbowscans.c@gmail.com';
 
 	/**
 	 * @var string
 	 */
-	public $fromName='Venkateshwara Diagnostic Centre';
+	public $fromName='Rainbow Scans';
 
 	/**
 	 * @var string
@@ -55,14 +55,14 @@ class Email extends BaseConfig
 	 *
 	 * @var string
 	 */
-	public $SMTPUser='vdck@venkateswaradiagnostic.in';
+	public $SMTPUser='rainbowscans.c@gmail.com';
 
 	/**
 	 * SMTP Password
 	 *
 	 * @var string
 	 */
-	public $SMTPPass='venkat@crescentEmai1';
+	public $SMTPPass='ynndternhtidqqyx';
 
 	/**
 	 * SMTP Port
