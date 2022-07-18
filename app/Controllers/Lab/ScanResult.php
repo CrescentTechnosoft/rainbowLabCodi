@@ -64,18 +64,15 @@ class ScanResult extends BaseController
     }
     public function getTestDetails(){
         $data=\json_decode($this->request->getGet('data'));
-        // print_r($data);
-        // $month=json_decode($this->request->getPost($data->month));
-        // $billNo=json_decode($this->request->getPost('billNo'));
-        // $testName=json_decode($this->request->getPost('testName'));
-        // print_r(base64_decode($testName));
         $this->response->setContentType('application/json');
         echo json_encode($this->m->getTestDetails($data->month,  $data->billNo,$data->testName));
     }
-    public function DeleteResult($month,$billNo,)
+    public function DeleteResult()
     {
-
+        $month=$this->request->getPost('month');
+        $billNo=$this->request->getPost('billNo');
+        $test=$this->request->getPost('testName');
         $this->response->setContentType('text/plain');
-        echo $this->m->DeleteLabResult($month, $billNo);
+        return $this->m->DeleteLabResult($month, $billNo,$test);
     }
 }

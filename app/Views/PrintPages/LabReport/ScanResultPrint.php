@@ -5,6 +5,9 @@ class PDF extends code128
 {
     public $headerType;
     public $reportedPerson;
+    public $sid;
+    public $name;
+    public $code;
     public function Header()
     {
         if ($this->headerType==='wh') {
@@ -12,7 +15,26 @@ class PDF extends code128
 
             $this->SetXY(10, 32);
         } else {
-            $this->SetXY(10, 50);
+            $this->SetXY(12, 30);
+
+            
+            
+        }
+        if ($this->PageNo() > 1) {
+            $this->SetFont('Archivo', '', 10);
+            $this->Cell(25, 8, "Patient Name", 0, 0);
+        
+            $this->SetFont('Archivo', 'B', 10);
+            $this->Cell(100, 8, ': ' . $this->name, 0, 0);
+            $this->Code128(165, $this->GetY() + 1, $this->code, 35, 7);
+        
+            $this->SetFont('Archivo', '', 10);
+        
+            $this->Cell(25, 8, 'SID', 0, 0);
+            $this->Text(165, $this->GetY() + 11, $this->sid);
+            $this->Cell(40, 8, ': ', 0, 1);
+            $this->Line(13,43,200,43);
+            $this->Ln(8);
         }
     }
 
@@ -30,6 +52,10 @@ $firstLabData=$LabData[0];
 $pdf = new PDF();
 $pdf->headerType=$header;
 $pdf->reportedPerson=$firstLabData->ReportedBy;
+$pdf->sid=$OPData->BillMonth . ' - ' . $OPData->BillNo;
+$pdf->name=$OPData->PName;
+$pdf->code=$OPData->BillMonth.$OPData->BillNo;
+
 $pdf->AliasNbPages();
 $pdf->AddPage();
 
@@ -62,15 +88,15 @@ $pdf->Cell(25, 6, 'UHID', 0, 0);
 $pdf->Cell(100, 6, ': '.$OPData->PID, 0, 0);
 
 $billDate=\DateTime::createFromFormat('Y-m-d H:i:s', $OPData->BillDate.$OPData->BillTime)->format('d/m/Y h:i A');
-$pdf->Cell(25, 6, 'Collected On', 0, 0);
+$pdf->Cell(25, 6, 'Date', 0, 0);
 $pdf->Cell(40, 6, ': '.$billDate, 0, 1);
 
 $pdf->Cell(25, 6, 'Referred By Dr', 0, 0);
-$pdf->Cell(100, 6, ': '.$OPData->Consultant, 0, 0);
+$pdf->Cell(100, 6, ': '.$OPData->Consultant, 0, 1);
 
-$rptDate=\DateTime::createFromFormat('Y-m-d H:i:s', $firstLabData->RptDate.' '.$firstLabData->RptTime)->format('d/m/Y h:i A');
-$pdf->Cell(25, 6, 'Reported On', 0, 0);
-$pdf->Cell(40, 6, ': '.$rptDate, 0, 1);
+// $rptDate=\DateTime::createFromFormat('Y-m-d H:i:s', $firstLabData->RptDate.' '.$firstLabData->RptTime)->format('d/m/Y h:i A');
+// $pdf->Cell(25, 6, 'Reported On', 0, 0);
+// $pdf->Cell(40, 6, ': '.$rptDate, 0, 1);
 
 $pdf->SetFont('ArchivoNarrow', 'B', 10);
 $pdf->Cell(190, 7, 'FINAL REPORT', 0, 1, 'C');

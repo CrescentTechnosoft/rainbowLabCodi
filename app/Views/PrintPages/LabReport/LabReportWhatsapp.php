@@ -187,7 +187,7 @@ foreach ($categories as $catIndex=>$category) {
                         $lines=max($pdf->NbLines(60, $lab->FieldName), $pdf->NbLines(60, $lab->NormalValue));
                         $pdf->CheckPageBreak((6*$lines)+35);
                     }
-                    $pdf->RowForResult([$lab->FieldName, $lab->Result, $lab->Units,  $lab->NormalValue], 5, true, $lab->ResultType);
+                    $pdf->RowForResult([$lab->FieldName, $lab->Result, $lab->Units,  $lab->NormalValue. $lab->Method], 5, true, $lab->ResultType);
                     if (strlen(trim($lab->Comments))>0) {
                         $pdf->SetFontSize(9);
                         $nb=$pdf->NbLines(185, $lab->Comments);
@@ -215,19 +215,25 @@ if ($pdf->GetY()<100) {
 }
 // $pdf->Image(APPPATH.'Images/VenkateshwaraLabsMicrobiologistSign.jpg', 90, $pdf->GetY()-10, 30, 11);
 // $pdf->Image(APPPATH.'Images/VenkateshwaraLabsPathologistSign.jpg', 153, $pdf->GetY()-11, 33, 12);
-
+$pdf->SetX(15);
+$pdf->Cell(70, 5, '', 0, 0);
+$pdf->SetFont('Archivo', 'B','10');
+$pdf->Cell(55, 5, '', 0, 0);
+$pdf->Cell(60, 5, 'Dr.M.SOCKALINGAM, MBBS,PGD(USG),(FRCR)(UK)', 0, 1,'R');
+$pdf->Cell(70, 5, '', 0, 0);
+$pdf->Cell(110, 5, 'Consultant Sonologist & Radiologist', 0, 1,'R');
 // $pdf->SetTextColor(0, 0, 0);
-$pdf->SetFont('Archivo', '', 10);
-$pdf->Cell(70, 5, 'Technologist', 0, 0);
+// $pdf->SetFont('Archivo', '', 10);
+// $pdf->Cell(70, 5, 'Technologist', 0, 0);
 
-$pdf->SetFont('Archivo', 'B');
-// $pdf->Cell(70, 5, 'DR.SELVAKUMARAN. PHD,', 0, 0);
-// $pdf->Cell(70, 5, 'DR.VASANTHI.K,MD,PATH', 0, 1);
+// $pdf->SetFont('Archivo', 'B');
+// // $pdf->Cell(70, 5, 'DR.SELVAKUMARAN. PHD,', 0, 0);
+// // $pdf->Cell(70, 5, 'DR.VASANTHI.K,MD,PATH', 0, 1);
 
-$pdf->SetFont('Archivo');
-$pdf->SetX(89);
-$pdf->Cell(72, 5, 'MICROBIOLOGIST', 0, 0);
-$pdf->Cell(70, 5, 'PATHOLOGIST', 0, 1);
+// $pdf->SetFont('Archivo');
+// $pdf->SetX(89);
+// $pdf->Cell(72, 5, 'MICROBIOLOGIST', 0, 0);
+// $pdf->Cell(70, 5, 'PATHOLOGIST', 0, 1);
 
 // $pdf->Output(isset($type)?$type:'I', isset($name)?$name:'Bill #' . $OPData->BillNo . '.pdf', 1);
 $filename = $pdf->firstRow->PID.$pdf->firstRow->PName;

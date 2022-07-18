@@ -39,7 +39,7 @@ class ProfileMaster_Model
 
         $insertVal = [];
         foreach ($tests as $test) {
-            $insertVal[] = ['ProfileName' => $data->profile, 'TestName' => $test, 'Fees' => $data->fees, 'HosID' => $this->hosID];
+            $insertVal[] = ['ProfileName' => $data->profile, 'TestName' => $test, 'Fees' => $data->fees, 'rbsDiscount' => $data->rbsDiscount, 'HosID' => $this->hosID];
         }
         
         $this->db->table('tblProfileMaster')
@@ -51,13 +51,15 @@ class ProfileMaster_Model
     public function GetProfileDetails(string $profileName):array
     {
         $dbResult=$this->db->table('tblProfileMaster')
-        ->select('Fees,TestName')
+        ->select('Fees,TestName,rbsDiscount')
         ->where(['ProfileName'=>$profileName,'HosID'=>$this->hosID])
         ->get()
         ->getResultObject();
 
         $result=[];
         $result['fees']=$dbResult[0]->Fees;
+        $result['rbsDiscount']=$dbResult[0]->rbsDiscount;
+
         $result['tests']=array_map(fn(object $val):string=>$val->TestName,$dbResult);
 
         return $result;

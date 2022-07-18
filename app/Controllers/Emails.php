@@ -34,7 +34,7 @@ class Emails extends BaseController
 
                 $email->setTo($emailID)
                 ->setSubject('Lab Report')
-                ->setMessage('<h4>Lab Report From Venkateshwara Diagnostic Centre</h4>');
+                ->setMessage('<h4>Lab Report From Rainbow Scans</h4>');
 
                 $filePath=\WRITEPATH.'temp/File'.rand(10, 100).'.pdf';
                 $file=\fopen($filePath, 'w');

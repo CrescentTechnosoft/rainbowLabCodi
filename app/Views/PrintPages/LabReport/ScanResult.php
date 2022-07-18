@@ -1,5 +1,5 @@
 <?php
-include(APPPATH.'Libraries/code128.php');
+include(APPPATH . 'Libraries/code128.php');
 
 class PDF extends code128
 {
@@ -7,12 +7,31 @@ class PDF extends code128
     public $reportedPerson;
     public function Header()
     {
-        if ($this->headerType==='wh') {
-            $this->Image(APPPATH.'Images/rainbow_head.jpg', 0, 0, 210, 30);
+        if ($this->headerType === 'wh') {
+            $this->Image(APPPATH . 'Images/rainbow_head.jpg', 0, 0, 210, 30);
 
             $this->SetXY(10, 32);
         } else {
-            $this->SetXY(10, 50);
+            $this->SetXY(12, 30);
+
+           
+            
+        }
+        if ($this->PageNo() > 1) {
+            $this->SetFont('Archivo', '', 10);
+            $this->Cell(25, 8, "Patient Name", 0, 0);
+        
+            $this->SetFont('Archivo', 'B', 10);
+            $this->Cell(100, 8, ': ' . $this->name, 0, 0);
+            $this->Code128(165, $this->GetY() + 1, $this->code, 35, 7);
+        
+            $this->SetFont('Archivo', '', 10);
+        
+            $this->Cell(25, 8, 'SID', 0, 0);
+            $this->Text(165, $this->GetY() + 11, $this->sid);
+            $this->Cell(40, 8, ': ', 0, 1);
+            $this->Line(13,43,200,43);
+            $this->Ln(8);
         }
     }
 
@@ -30,6 +49,9 @@ $firstLabData=$LabData[0];
 $pdf = new PDF();
 $pdf->headerType=$header;
 $pdf->reportedPerson=$firstLabData->ReportedBy;
+$pdf->sid=$OPData->BillMonth . ' - ' . $OPData->BillNo;
+$pdf->name=$OPData->PName;
+$pdf->code=$OPData->BillMonth.$OPData->BillNo;
 $pdf->AliasNbPages();
 $pdf->AddPage();
 
@@ -43,34 +65,34 @@ $pdf->SetFont('Archivo', '', 10);
 $pdf->Cell(25, 12, "Patient Name", 0, 0);
 
 $pdf->SetFont('Archivo', 'B', 10);
-$pdf->Cell(100, 12, ': '.$OPData->PName, 0, 0);
-$pdf->Code128(165, $pdf->GetY()+1, $OPData->BillMonth.$OPData->BillNo, 35, 7);
+$pdf->Cell(100, 12, ': ' . $OPData->PName, 0, 0);
+$pdf->Code128(165, $pdf->GetY() + 1, $OPData->BillMonth . $OPData->BillNo, 35, 7);
 
 $pdf->SetFont('Archivo', '', 10);
 
 $pdf->Cell(25, 12, 'SID', 0, 0);
-$pdf->Text(165, $pdf->GetY()+11, $OPData->BillMonth.' - '.$OPData->BillNo);
+$pdf->Text(165, $pdf->GetY() + 11, $OPData->BillMonth . ' - ' . $OPData->BillNo);
 $pdf->Cell(40, 12, ': ', 0, 1);
 
 $pdf->Cell(25, 6, 'Age / Gender', 0, 0);
-$pdf->Cell(100, 6, ': '.$OPData->Age . ' / ' . $OPData->Gender, 0, 0);
+$pdf->Cell(100, 6, ': ' . $OPData->Age . ' / ' . $OPData->Gender, 0, 0);
 
 $pdf->Cell(25, 6, 'Contact No', 0, 0);
-$pdf->Cell(40, 6, ': '.$OPData->ContactNo, 0, 1);
+$pdf->Cell(40, 6, ': ' . $OPData->ContactNo, 0, 1);
 
 $pdf->Cell(25, 6, 'UHID', 0, 0);
-$pdf->Cell(100, 6, ': '.$OPData->PID, 0, 0);
+$pdf->Cell(100, 6, ': ' . $OPData->PID, 0, 0);
 
-$billDate=\DateTime::createFromFormat('Y-m-d H:i:s', $OPData->BillDate.$OPData->BillTime)->format('d/m/Y h:i A');
-$pdf->Cell(25, 6, 'Collected On', 0, 0);
-$pdf->Cell(40, 6, ': '.$billDate, 0, 1);
+$billDate = \DateTime::createFromFormat('Y-m-d H:i:s', $OPData->BillDate . $OPData->BillTime)->format('d/m/Y h:i A');
+$pdf->Cell(25, 6, 'Date', 0, 0);
+$pdf->Cell(40, 6, ': ' . $billDate, 0, 1);
 
 $pdf->Cell(25, 6, 'Referred By Dr', 0, 0);
-$pdf->Cell(100, 6, ': '.$OPData->Consultant, 0, 0);
+$pdf->Cell(100, 6, ': ' . $OPData->Consultant, 0, 1);
 
-$rptDate=\DateTime::createFromFormat('Y-m-d H:i:s', $firstLabData->RptDate.' '.$firstLabData->RptTime)->format('d/m/Y h:i A');
-$pdf->Cell(25, 6, 'Reported On', 0, 0);
-$pdf->Cell(40, 6, ': '.$rptDate, 0, 1);
+// $rptDate=\DateTime::createFromFormat('Y-m-d H:i:s', $firstLabData->RptDate.' '.$firstLabData->RptTime)->format('d/m/Y h:i A');
+// $pdf->Cell(25, 6, 'Reported On', 0, 0);
+// $pdf->Cell(40, 6, ': '.$rptDate, 0, 1);
 
 $pdf->SetFont('ArchivoNarrow', 'B', 10);
 $pdf->Cell(190, 7, 'FINAL REPORT', 0, 1, 'C');
@@ -99,8 +121,8 @@ $pdf->MultiCell(180, 5, utf8_decode($firstLabData->Result), 0, 1);
 $pdf->Ln(10);
 $pdf->SetDrawColor(0, 0, 0);
 $pdf->SetLineWidth(.5);
-$pdf->Line(13, $pdf->GetY()+2, 91, $pdf->GetY()+2);
-$pdf->Line(120, $pdf->GetY()+2, 198, $pdf->GetY()+2);
+$pdf->Line(13, $pdf->GetY() + 2, 91, $pdf->GetY() + 2);
+$pdf->Line(120, $pdf->GetY() + 2, 198, $pdf->GetY() + 2);
 $pdf->SetFont('Archivo', 'B');
 $pdf->Cell(188, 5, 'End of the Report', 0, 1, 'C');
 $pdf->Ln(15);
@@ -114,11 +136,11 @@ $pdf->Ln(15);
 // $pdf->Cell(70, 5, 'Technologist', 0, 0);
 $pdf->SetX(15);
 $pdf->Cell(70, 5, '', 0, 0);
-$pdf->SetFont('Archivo', 'B','10');
+$pdf->SetFont('Archivo', 'B', '10');
 $pdf->Cell(55, 5, '', 0, 0);
-$pdf->Cell(60, 5, 'Dr.M.SOCKALINGAM, MBBS,PGD(USG),(FRCR)(UK)', 0, 1,'R');
+$pdf->Cell(60, 5, 'Dr.M.SOCKALINGAM, MBBS,PGD(USG),(FRCR)(UK)', 0, 1, 'R');
 $pdf->Cell(70, 5, '', 0, 0);
-$pdf->Cell(110, 5, 'Consultant Sonologist & Radiologist', 0, 1,'R');
+$pdf->Cell(110, 5, 'Consultant Sonologist & Radiologist', 0, 1, 'R');
 // $pdf->SetFont('Archivo', 'B');
 // $pdf->Cell(70, 5, 'DR.SELVAKUMARAN. PHD,', 0, 0);
 // $pdf->Cell(70, 5, 'DR.VASANTHI.K,MD,PATH', 0, 1);
@@ -129,5 +151,5 @@ $pdf->Cell(110, 5, 'Consultant Sonologist & Radiologist', 0, 1,'R');
 // $pdf->Cell(70, 5, 'PATHOLOGIST', 0, 1);
 // $pdf->Output(isset($type)?$type:'I', isset($name)?$name:'Bill #' . $OPData->BillNo . '.pdf', 1);
 $filename = $OPData->BillNo;
-$pdf->Output('F',WRITEPATH.('temp').'/'.$filename. '.pdf', true);
+$pdf->Output('F', WRITEPATH . ('temp') . '/' . $filename . '.pdf', true);
 // $pdf->Output('', "Report Bill #$OPData->BillMonth$OPData->BillNo.pdf", 1);

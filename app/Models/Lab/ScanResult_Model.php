@@ -44,54 +44,39 @@ class ScanResult_Model
         $builder = $this->db->table('tblLabBills t1');
         $builder->join('tblLabBillDetails t21', 't1.BillNo = t21.BillNo AND t1.BillMonth = t21.BillMonth')
             ->select('t1.BillNo,t1.PName')
-            ->where(['t1.BillDate' => $date, 't1.HosID' => $this->hosID, 't21.Category' => 'RADIOLOGY'])
+            // ->where(['t1.BillDate' => $date, 't1.HosID' => $this->hosID, 't21.Category' => 'Profile'])
+            // ->where('t1.BillDate',$date)
+            // ->where('t1.HosID',$this->hosID)
+            // ->where('t21.Category','RADIOLOGY')
+            ->where("(t21.Category = 'RADIOLOGY' AND t1.BillDate = '$date' AND t1.HosID = '$this->hosID') 
+            OR (t21.Category='Profile' AND t1.BillDate = '$date' AND t1.HosID = '$this->hosID')")
             ->orderBy('t1.BillNo', 'DESC')
             ->distinct('t1.BillNo');
+
         return array_map('array_values', $builder->get()->getResultArray());
     }
 
-    public function GetLabDetails($month, $billNo): array
+    public function GetLabDetails($month, $billNo)
     {
-        if (!$this->ExistInLab($month, $billNo)) {
-            return $this->GetBillData($month, $billNo);
-        } else {
-            return $this->GetLabResult($month, $billNo);
-        }
+        // if (!$this->ExistInLab($month, $billNo)) {
+        return $this->GetBillData($month, $billNo);
+        // } else {
+        //     return $this->GetLabResult($month, $billNo);
+        // }
     }
 
-    private function ExistInLab($month,  $billNo): bool
+    private function ExistInLab($month,  $billNo, $testName): bool
     {
         return $this->db->table('tblScanResult')
             ->select('BillNo')
-            ->where(['BillMonth' => $month, 'BillNo' => $billNo, 'HosID' => $this->hosID])
-            ->like('Category', 'RADIOLOGY')
+            ->where(['BillMonth' => $month, 'BillNo' => $billNo, 'TestName' => $testName, 'HosID' => $this->hosID])
+            // ->like('Category', 'RADIOLOGY')
             // ->notLike('Category', '')
             ->countAllResults() > 0;
     }
 
-    // private function GetTestFromProfile($profileName): array
-    // {
-    //     $res = $this->db->table('tblProfileMaster')
-    //         ->select('TestName')
-    //         ->where(['ProfileName' => $profileName, 'HosID' => $this->hosID])
-    //         ->whereNotIn('TestName', 'culture')
-    //         ->get()
-    //         ->getResultObject();
 
-    //     return array_map(fn (object $val): string => $val->TestName, $res);
-    // }
-
-    // private function PopulateTestFields(string $testName): array
-    // {
-    //     return $this->db->table('tblTestMaster')
-    //         ->select("Category category,TestName test,FieldName field,'' result,parameters,NormalValue normal,Method method,'N' norm,0 selected")
-    //         ->where(['ShortName' => $testName, 'HosID' => $this->hosID])
-    //         ->notLike('TestName', 'culture')
-    //         ->get()
-    //         ->getResultObject();
-    // }
-
-    private function GetBillData($month, $billNo): array
+    private function GetBillData($month, $billNo)
     {
         $res = $this->db->table('tblLabBills b')
             ->select('b.PID,b.PName,b.Age,b.Gender,b.Consultant,d.Category,d.TestName,')
@@ -99,15 +84,37 @@ class ScanResult_Model
             ->where(['b.BillMonth' => $month, 'b.BillNo' => $billNo, 'b.HosID' => $this->hosID])
             ->get()
             ->getResultObject();
-
-
-        $testName=array();
-        foreach($res as $test){
-          array_push($testName , $test->TestName);
-        }
-        // $data = ['fields' => []];
         $row = $res[0];
-        $data['testNames']= $testName;
+        $testName = array();
+
+        if ($row->Category === 'Profile') {
+            // take all the scan tests from profile
+            $scanTest = $this->db->table('tblTestMaster')
+                ->select('TestName')
+                ->where('Category', 'RADIOLOGY')
+                ->where('HosID', $this->hosID)
+                ->get()
+                ->getResultArray();
+            foreach ($scanTest as $scan) {
+                $scanTestProfile = $this->db->table('tblProfileMaster')
+                    ->select('TestName')
+                    ->where('ProfileName', $row->TestName)
+                    ->where('HosID', $this->hosID)
+                    ->where('TestName', $scan['TestName']);
+
+                $values = array_map(fn (object $val): string => $val->TestName, $scanTestProfile->get()->getResultObject());
+                if ($values !== []) {
+                    array_push($testName, $values[0]);
+                }
+            }
+        } else {
+            foreach ($res as $test) {
+                array_push($testName, $test->TestName);
+            }
+        }
+
+        // $data = ['fields' => []];
+        $data['testNames'] = $testName;
         $data['data'] = [
             'id' => $row->PID,
             'name' => $row->PName,
@@ -137,75 +144,74 @@ class ScanResult_Model
         $data['data'] = $this->GetOPResultData($month, $billNo);
         $data['data']->isSaved = true;
 
-        $testName=array();
-        $test= $this->db->table('tblScanResult r')
+        $testName = array();
+        $test = $this->db->table('tblScanResult r')
             ->select('r.TestName ,r.Category')
             ->where(['r.BillMonth' => $month, 'r.BillNo' => $billNo, 'r.HosID' => $this->hosID])
             ->get()
             ->getResultObject();
-        array_push($testName,$test[0]->TestName);
+        array_push($testName, $test[0]->TestName);
         $data['testNames'] = $testName;
 
         return $data;
     }
-    public function getTestDetails($month, $billNo ,$testName){
-
-        // $test= $this->db->table('tblScanResult r')
-        //     ->select('r.Category category, r.Result result,r.Remarks remarks')
-        //     ->where(['r.BillMonth' => $month, 'r.BillNo' => $billNo, 'r.TestName' => $testName])
-        //     ->get()
-        //     ->getResultObject();
-        if (!$this->ExistInLab($month, $billNo)) {
-            $test= $this->db->table('tblTestMaster r')
-            ->select('r.Comments as comments,r.Category category ')
-            ->where(['r.ShortName' =>'US COMPLETE ABDOMEN','r.HosID'=>$this->hosID])
-            ->get()
-            ->getResultObject();
+    public function getTestDetails($month, $billNo, $testName)
+    {
+        if (!$this->ExistInLab($month, $billNo, $testName)) {
+            $test = $this->db->table('tblTestMaster r')
+                ->select('r.Comments as comments,r.Category category ')
+                ->where(['r.ShortName' => $testName, 'r.HosID' => $this->hosID])
+                ->get()
+                ->getResultObject();
             // print_r($test);
+            $test[0]->isSaved = false;
+
             return $test[0];
         } else {
-            $test= $this->db->table('tblScanResult r')
-            ->select('r.Category category, r.Result comments')
-            ->where(['r.BillMonth' => $month, 'r.BillNo' => $billNo, 'r.TestName' => $testName])
-            ->get()
-            ->getResultObject();
-            return $test[0];
+            $test = $this->db->table('tblScanResult r')
+                ->select('r.Category category, r.Result comments')
+                ->where(['r.BillMonth' => $month, 'r.BillNo' => $billNo, 'r.TestName' => $testName])
+                ->get()
+                ->getResultObject();
+            $test[0]->isSaved = true;
 
+            return $test[0];
         }
-       
     }
 
-    public function SaveResult($month,$data,$userName)
+    public function SaveResult($month, $data, $userName)
     {
-   
-        $this->db->table('tblScanResult')
-            ->where(['BillMonth' => $month, 'BillNo' => $data->billNo, 'HosID' => $this->hosID])
-            ->delete();
+
+        // $this->db->table('tblScanResult')
+        //     ->where(['BillMonth' => $month, 'BillNo' => $data->billNo, 'HosID' => $this->hosID])
+        //     ->delete();
 
         $insertVal = [];
         $date = date('Y-m-d');
         $time = date('H:i:s');
-            $insertVal[] =
-                [
-                    'BillMonth' => $month, 'BillNo' => $data->billNo, '
+        $insertVal[] =
+            [
+                'BillMonth' => $month, 'BillNo' => $data->billNo, '
                     Category' => $data->category, 'TestName' => $data->testName,
-                    'Result' => $data->result,
-                    'Remarks' => $data->remarks,
-                    'RptDate' => $date, 'RptTime' => $time,
-                    'ReportedBy' => $userName,  'HosID' => $this->hosID
-                ];
+                'Result' => $data->result,
+                'Remarks' => $data->remarks,
+                'RptDate' => $date, 'RptTime' => $time,
+                'ReportedBy' => $userName,  'HosID' => $this->hosID
+            ];
         $this->db->table('tblScanResult')
             ->insertBatch($insertVal);
 
         return 'Lab Result Saved';
     }
 
-    public function DeleteLabResult( $month,  $billNo): string
+    public function DeleteLabResult($month, $billNo, $test)
     {
         $this->db->table('tblScanResult')
-            ->where(['BillMonth' => $month, 'BillNo' => $billNo, 'HosID' => $this->hosID])
+            ->where(['BillMonth' => $month, 'BillNo' => $billNo, 'TestName' => $test, 'HosID' => $this->hosID])
             ->delete();
 
-        return 'Lab Result Deleted';
+        return [
+            'status' => true,
+        ];
     }
 }

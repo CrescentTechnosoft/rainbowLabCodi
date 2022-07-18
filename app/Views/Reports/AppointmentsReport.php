@@ -35,7 +35,7 @@ $pdf->AddPage();
 $pdf->SetAligns(['R',  'R', 'L', 'L', 'R']);
 $pdf->SetWidths([20, 40, 40, 50, 40]);
 $pdf->SetFont('times', 'B', 12);
-$pdf->Cell(200, 10, 'Lab Collection', 0, 1, 'C');
+$pdf->Cell(200, 10, 'Appointments Scheduled', 0, 1, 'C');
 $pdf->SetFont('times', 'B', 10);
 $pdf->SetFillColor(200, 0, 0);
 $pdf->SetFont('times', 'B', 11);

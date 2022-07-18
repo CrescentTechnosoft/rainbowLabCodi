@@ -17,9 +17,9 @@ class ProfileMaster extends BaseController
     public function index():void
     {
         $this->response->setContentType('application/json');
-        $this->response->setHeader('Content-Encoding','br');
+        //$this->response->setHeader('Content-Encoding','br');
 
-        echo \brotli_compress(\json_encode(['profiles'=>$this->m->GetProfileNames(),'tests'=>$this->m->GetTestNames()]));
+        echo \json_encode(['profiles'=>$this->m->GetProfileNames(),'tests'=>$this->m->GetTestNames()]);
     }
 
     public function Save():void

@@ -186,7 +186,7 @@ foreach ($categories as $catIndex=>$category) {
                         $lines=max($pdf->NbLines(60, $lab->FieldName), $pdf->NbLines(60, $lab->NormalValue));
                         $pdf->CheckPageBreak((6*$lines)+35);
                     }
-                    $pdf->RowForResult([$lab->FieldName . $lab->TestMethod, $lab->Result, $lab->Units,  $lab->NormalValue], 5, true, $lab->ResultType);
+                    $pdf->RowForResult([$lab->FieldName , $lab->Result, $lab->Units,  $lab->NormalValue. $lab->Method], 5, true, $lab->ResultType);
                     if (strlen(trim($lab->Comments))>0) {
                         $pdf->SetFontSize(9);
                         $nb=$pdf->NbLines(185, $lab->Comments);

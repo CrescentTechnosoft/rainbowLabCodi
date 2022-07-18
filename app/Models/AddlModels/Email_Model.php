@@ -40,7 +40,7 @@ class Email_Model
         ->getResultObject();
 
         $data["LabData"] =$builder->from('tblLabResult r', true)
-        ->select('r.Category,r.TestName,t.FieldCategory,r.FieldName,r.Result,r.RptDate,r.RptTime,r.ResultType,t.Units,t.NormalValue,t.Comments,t.TotalComments,r.ReportedBy')
+        ->select('r.Category,r.TestName,t.FieldCategory,r.Method,r.FieldName,r.Result,r.RptDate,r.RptTime,r.ResultType,t.Units,t.NormalValue,t.Comments,t.TotalComments,r.ReportedBy')
         ->join('tblTestMaster t', 'r.TestName=t.TestName AND r.FieldName=t.FieldName AND r.HosID=t.HosID')
         ->where(['r.BillMonth'=>$month,'r.BillNo'=>$billNo,'r.IsSelected'=>1,'r.HosID'=>$this->hosID])
         ->orderBy('r.Alignment', 'ASC')
@@ -66,7 +66,7 @@ class Email_Model
         ->getResultObject();
 
         $data["LabData"] =$builder->from('tblLabResult r', true)
-        ->select('r.Category,r.TestName,t.FieldCategory,r.FieldName,r.Result,r.RptDate,r.RptTime,r.ResultType,t.Units,t.NormalValue,t.Comments,t.TotalComments,r.ReportedBy')
+        ->select('r.Category,r.TestName,t.FieldCategory,r.Method,r.FieldName,r.Result,r.RptDate,r.RptTime,r.ResultType,t.Units,t.NormalValue,t.Comments,t.TotalComments,r.ReportedBy')
         ->join('tblTestMaster t', 'r.TestName=t.TestName AND r.FieldName=t.FieldName AND r.HosID=t.HosID')
         ->where(['r.BillMonth'=>$month,'r.BillNo'=>$billNo,'r.IsSelected'=>1,'r.HosID'=>$this->hosID])
         ->orderBy('r.Alignment', 'ASC')

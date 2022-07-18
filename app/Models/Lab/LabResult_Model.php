@@ -78,7 +78,7 @@ class LabResult_Model
         $res=$this->db->table('tblProfileMaster')
         ->select('TestName')
         ->where(['ProfileName'=>$profileName,'HosID'=>$this->hosID])
-        ->whereNotIn('TestName', 'culture')
+        // ->whereNotIn('TestName', 'culture')
         ->get()
         ->getResultObject();
         
